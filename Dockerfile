@@ -1,9 +1,18 @@
-FROM python:3.8-slim-buster
+FROM python:3
+
+RUN apt-get update -y
+
+# We copy just the requirements.txt first to leverage Docker cache
+COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
 
-RUN pip3 install Flask
+RUN pip install -r requirements.txt
 
-COPY . .
+# RUN pip install flask
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+COPY . /app
+
+ENTRYPOINT [ "python3" ]
+
+CMD [ "main.py" ]
